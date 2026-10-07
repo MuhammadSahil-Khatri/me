@@ -8,3 +8,9 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+## Architecture rules
+- Keep the portfolio as one anchor-navigated index route because the brief explicitly requires a single scrolling page.
+- Store project content in a reusable data module and label illustrative concepts honestly because no verified project records or URLs were supplied.
+- Lazy-load the React Three Fiber globe after its section approaches the viewport, behind a browser hydration guard and an error boundary, to preserve SSR safety and initial-load performance.
+- Define presentation styles and semantic monochrome tokens in the global stylesheet and use shared Button variants for commands to preserve design consistency.
