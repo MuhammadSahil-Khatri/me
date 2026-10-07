@@ -1,0 +1,8 @@
+import assetSystem from '@/assets/asset-system.jpg';
+import workflowSystem from '@/assets/workflow-system.jpg';
+
+export const projects = [
+  { number: '01', title: 'Enterprise Asset Solution', category: 'SYSTEMS / WEB APPLICATION', description: 'An exploration of a unified platform for assets, maintenance operations, and work orders.', tags: ['Asset management', 'Work orders', 'Inventory'], image: assetSystem, imageAlt: 'Monochrome sculptural server towers', status: 'Concept project', detail: 'A concept for bringing asset records, maintenance schedules, and inventory into one connected workspace. This preview illustrates the system direction; implementation details and a live project link are not yet available.' },
+  { number: '02', title: 'Intelligent Workflows', category: 'AI / AUTOMATION', description: 'Exploring the intersection of backend systems and AI-powered automation.', tags: ['AI workflows', 'Integrations', 'Orchestration'], image: workflowSystem, imageAlt: 'Connected modular blocks representing an automated workflow', status: 'Concept project', detail: 'A concept exploring how modular backend services can connect with AI-powered workflows. This is a visual preview, not a claim of a deployed product. A repository and implementation details can be added when available.' },
+];
+export const technologies = ['TypeScript', 'Node.js', 'PostgreSQL', 'React', 'Docker', 'Git', 'Supabase', 'AI / LLMs'];
