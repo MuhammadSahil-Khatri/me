@@ -149,7 +149,7 @@
   .mobile-nav { position:fixed; z-index:29; inset:70px 0 auto; background:var(--background); border-bottom:1px solid var(--border); padding:15px 24px 25px; }
   .mobile-nav a { display:flex; justify-content:space-between; padding:18px 0; font-size:23px; }
   .page-inner { padding-left:24px; padding-right:24px; }
-  .hero { padding-top:126px; min-height:650px; height:calc(100svh - 15px); max-height:850px; padding-bottom:26px; }
+  .hero { padding-top:126px; min-height:650px; height:calc(100svh - 105px); max-height:850px; padding-bottom:26px; }
   .hero-eyebrow { font-size:8px; margin-bottom:38px; gap:7px; }.eyebrow-index { display:none; }
   .hero h1 { font-size:57px; line-height:1.13; font-weight:600; }.hero h1 .hero-greeting { font-size:33px; margin-bottom:10px; }
   .hero-bottom { margin-top:32px; align-items:flex-start; gap:18px; }.hero-bottom p { font-size:13px; line-height:1.85; max-width:260px; }.desktop-break { display:none; }.round-link { width:43px; height:43px; flex-shrink:0; margin-top:4px; }.round-link svg { width:21px; }
