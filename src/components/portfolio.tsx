@@ -58,9 +58,9 @@ export function ProjectList() {
 }
 
 class GlobeBoundary extends Component<{children: ReactNode}, {failed: boolean}> {
-  state = {failed: false};
+  override state = {failed: false};
   static getDerivedStateFromError() { return {failed: true}; }
-  render() { return this.state.failed ? <div className="globe-fallback" aria-label="Technology network" /> : this.props.children; }
+  override render() { return this.state.failed ? <div className="globe-fallback" aria-label="Technology network" /> : this.props.children; }
 }
 
 export function Technology() {
@@ -68,7 +68,7 @@ export function Technology() {
   useEffect(() => {
     const element = document.getElementById('about');
     if (!element) return;
-    const observer = new IntersectionObserver(([entry]) => { if (entry.isIntersecting) { setReady(true); observer.disconnect(); } }, { rootMargin: '350px' });
+    const observer = new IntersectionObserver(([entry]) => { if (entry?.isIntersecting) { setReady(true); observer.disconnect(); } }, { rootMargin: '350px' });
     observer.observe(element);
     return () => observer.disconnect();
   }, []);
