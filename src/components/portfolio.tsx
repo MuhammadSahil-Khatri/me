@@ -32,18 +32,37 @@ export function Navbar() {
   }, []);
   return <>
     <header className="site-header"><a className="wordmark" href="#home" aria-label="MSK home">MSK<span className="logo-dot">.</span></a>
-      <nav aria-label="Main navigation" className="desktop-nav">{['Work', 'About', 'Contact'].map(label => <a className={active === label.toLowerCase() ? 'active' : ''} href={`#${label.toLowerCase()}`} key={label}>{label}<ArrowUpRight size={12} /></a>)}</nav>
+      <a className="nav-email" href="mailto:sahilkhatri.dev@gmail.com">sahilkhatri.dev@gmail.com</a>
+      <nav aria-label="Main navigation" className="desktop-nav">{['Work', 'About', 'Contact'].map(label => <a className={active === label.toLowerCase() ? 'active' : ''} href={`#${label.toLowerCase()}`} key={label}>{label}<ArrowUpRight size={12} /></a>)}<a className="nav-resume" href="/resume.pdf" download="Muhammad-Sahil-Khatri-Resume.pdf">RESUME<ArrowDown size={12} /></a></nav>
       <Button className="mobile-menu-button" variant="ghost" size="icon" aria-label={open ? 'Close navigation' : 'Open navigation'} aria-expanded={open} onClick={() => setOpen(!open)}>{open ? <X /> : <Menu />}</Button>
     </header>
-    {open && <nav className="mobile-nav" aria-label="Mobile navigation">{['Work', 'About', 'Contact'].map(label => <a href={`#${label.toLowerCase()}`} onClick={() => setOpen(false)} key={label}>{label}<ArrowUpRight /></a>)}</nav>}
+    {open && <nav className="mobile-nav" aria-label="Mobile navigation">{['Work', 'About', 'Contact'].map(label => <a href={`#${label.toLowerCase()}`} onClick={() => setOpen(false)} key={label}>{label}<ArrowUpRight /></a>)}<a href="mailto:sahilkhatri.dev@gmail.com" onClick={() => setOpen(false)}>sahilkhatri.dev@gmail.com<ArrowUpRight /></a><a href="/resume.pdf" download="Muhammad-Sahil-Khatri-Resume.pdf" onClick={() => setOpen(false)}>Resume<ArrowDown /></a></nav>}
     <aside className="social-rail" aria-label="Social profiles"><span className="rail-label">ELSEWHERE</span><SocialLinks /><span className="rail-line" /><span className="rail-bottom">MSK — 2026</span></aside>
   </>;
+}
+
+function TypewriterName() {
+  const fullName = 'Muhammad Sahil Khatri';
+  const reduced = useReducedMotion();
+  const [text, setText] = useState('');
+  const done = text.length >= fullName.length;
+  useEffect(() => {
+    if (reduced) { setText(fullName); return; }
+    let index = 0;
+    const timer = setInterval(() => {
+      index += 1;
+      setText(fullName.slice(0, index));
+      if (index >= fullName.length) clearInterval(timer);
+    }, 90);
+    return () => clearInterval(timer);
+  }, [reduced]);
+  return <>{text}{done && <span className="name-period">.</span>}<span className="name-caret" aria-hidden="true" /></>;
 }
 
 export function Hero() {
   return <section id="home" className="hero page-inner">
     <Reveal><div className="hero-eyebrow"><span className="tiny-dot" /> BACKEND ENGINEER & SYSTEMS THINKER <span className="eyebrow-index">PORTFOLIO — 2026</span></div>
-      <h1><span className="hero-greeting">Hi, I'm</span><span>Muhammad</span><span>Sahil Khatri<span className="name-period">.</span></span></h1>
+      <h1 aria-label="Hi, I'm Muhammad Sahil Khatri."><span className="hero-greeting" aria-hidden="true">Hi, I'm</span><span aria-hidden="true"><TypewriterName /></span></h1>
       <div className="hero-bottom"><p>Backend Engineer building reliable systems,<br className="desktop-break" /> scalable infrastructure, and AI-powered workflows.</p><a className="round-link" href="#work" aria-label="Explore selected work"><ArrowDown strokeWidth={1.2} size={28} /></a></div>
     </Reveal>
     <div className="hero-footnote"><span>COMPUTER SYSTEMS ENGINEERING STUDENT</span><a href="#work">SCROLL TO EXPLORE <ArrowDown size={13} /></a></div>
@@ -76,8 +95,7 @@ export function Technology() {
 }
 
 export function ContactSection() {
-  const [notice, setNotice] = useState(false);
-  return <section id="contact" className="contact page-inner"><Reveal><div className="section-kicker"><span>03 / WHAT'S NEXT</span><span>GOOD WORK STARTS WITH A CONVERSATION</span></div><h2>Let's build<br />something useful<span className="title-dot">.</span></h2><div className="contact-bottom"><div><Button variant="editorial" className="contact-action" onClick={() => setNotice(!notice)} aria-expanded={notice}>GET IN TOUCH <ArrowUpRight size={26} /></Button>{notice && <p role="status" className="contact-notice">Contact details will be available soon.</p>}</div><SocialLinks expanded /></div></Reveal></section>;
+  return <section id="contact" className="contact page-inner"><Reveal><div className="section-kicker"><span>03 / WHAT'S NEXT</span><span>GOOD WORK STARTS WITH A CONVERSATION</span></div><h2>Let's build<br />something useful<span className="title-dot">.</span></h2><div className="contact-bottom"><div><Button variant="editorial" className="contact-action" onClick={() => { window.location.href = 'mailto:sahilkhatri.dev@gmail.com'; }}>GET IN TOUCH <ArrowUpRight size={26} /></Button></div><SocialLinks expanded /></div></Reveal></section>;
 }
 
 export function Footer() {
