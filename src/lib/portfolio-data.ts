@@ -12,6 +12,7 @@ export const experience = [
     period: 'NOV 2025 — PRESENT',
     role: 'Full Stack Developer',
     company: 'PresentoLab',
+    url: 'https://presentolab.com/',
     summary: 'Building and maintaining the web application, with a focus on backend logic, REST APIs, database operations, and third-party integrations.',
     tools: ['Node.js', 'Express.js', 'MongoDB', 'React / Next.js'],
   },
@@ -19,6 +20,7 @@ export const experience = [
     period: 'AUG 2025',
     role: 'Backend Developer',
     company: 'Silinx',
+    url: 'https://www.silinxx.com/',
     summary: 'Contributed backend services, APIs, and data features for a maintenance management platform and its operational dashboard.',
     tools: ['Node.js', 'Express.js', 'REST APIs', 'Data management'],
   },
@@ -37,4 +39,10 @@ export const certifications = [
     title: 'Introduction to Generative AI',
     issuer: 'Google',
   },
+];
+
+export const socialLinks = [
+  { name: 'GitHub', url: 'https://github.com/MuhammadSahil-Khatri' },
+  { name: 'LinkedIn', url: 'https://www.linkedin.com/in/msahil-khatri' },
+  { name: 'X', url: 'https://x.com/Sahil_Khatri966' },
 ];

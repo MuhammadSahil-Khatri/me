@@ -10,7 +10,7 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   title: 'Muhammad Sahil Khatri — Backend Engineer',
   description:
-    'Muhammad Sahil Khatri, backend engineer and Computer Systems Engineering student. Exploring reliable systems, infrastructure, and AI-powered workflows.',
+    'Muhammad Sahil Khatri, backend engineer and Computer Systems Engineering student @ MUET. Exploring reliable systems, infrastructure, and AI-powered workflows.',
   authors: [{ name: 'Muhammad Sahil Khatri' }],
   icons: {
     icon: '/favicon.svg',
@@ -47,11 +47,8 @@ export default function RootLayout({
             __html: `
               try {
                 var saved = localStorage.getItem('portfolio-theme');
-                var isDark = saved ? saved === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
-                if (isDark) {
+                if (saved === 'dark') {
                   document.documentElement.classList.add('dark');
-                } else {
-                  document.documentElement.classList.remove('dark');
                 }
               } catch (_) {}
             `,
