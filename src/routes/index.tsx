@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Navbar, Hero, ProjectList, Technology, ContactSection, Footer } from '@/components/portfolio';
+import { Navbar, Hero, ProjectList, Technology, ExperienceSection, CertificationsSection, InquirySection, ContactSection, Footer } from '@/components/portfolio';
 
 export const Route = createFileRoute("/")({
   head: () => ({ meta: [
@@ -14,5 +14,5 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
-  return <><a href="#main" className="skip-link">Skip to content</a><Navbar /><main id="main" className="portfolio-main"><Hero /><ProjectList /><Technology /><ContactSection /><Footer /></main></>;
+  return <><a href="#main" className="skip-link">Skip to content</a><Navbar /><main id="main" className="portfolio-main"><Hero /><ProjectList /><Technology /><ExperienceSection /><CertificationsSection /><InquirySection /><ContactSection /><Footer /></main></>;
 }

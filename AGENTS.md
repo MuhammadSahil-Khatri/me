@@ -14,3 +14,4 @@
 - Store project content in a reusable data module and label illustrative concepts honestly because no verified project records or URLs were supplied.
 - Lazy-load the React Three Fiber globe after its section approaches the viewport, behind a browser hydration guard and an error boundary, to preserve SSR safety and initial-load performance.
 - Define presentation styles and semantic monochrome tokens in the global stylesheet and use shared Button variants for commands to preserve design consistency.
+- Keep résumé-derived experience and certification content in the shared portfolio data module so factual profile content stays reusable and easy to update.
