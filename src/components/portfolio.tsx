@@ -1,6 +1,6 @@
 import { Component, lazy, Suspense, useEffect, useState, type FormEvent, type ReactNode } from 'react';
 import { motion, useReducedMotion } from 'motion/react';
-import { ArrowDown, ArrowUpRight, ArrowUp, Github, Linkedin, Menu, X, Plus, Minus, Send } from 'lucide-react';
+import { ArrowDown, ArrowUpRight, ArrowUp, Github, Linkedin, Menu, X, Plus, Minus, Send, Sun, Moon } from 'lucide-react';
 import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { certifications, experience, projects, technologies } from '@/lib/portfolio-data';
@@ -10,7 +10,7 @@ const socialItems = [{ name: 'GitHub', Icon: Github }, { name: 'LinkedIn', Icon:
 
 function Reveal({ children, className = '' }: { children: ReactNode; className?: string }) {
   const reduced = useReducedMotion();
-  return <motion.div className={className} initial={reduced ? false : { opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-30px' }} transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}>{children}</motion.div>;
+  return <motion.div className={className} initial={reduced ? false : { opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: false, amount: 0.1 }} transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}>{children}</motion.div>;
 }
 
 function SocialLinks({ expanded = false }: { expanded?: boolean }) {
@@ -24,6 +24,21 @@ function SocialLinks({ expanded = false }: { expanded?: boolean }) {
 export function Navbar() {
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState('');
+  const [dark, setDark] = useState(false);
+  useEffect(() => {
+    let saved: string | null = null;
+    try { saved = localStorage.getItem('portfolio-theme'); } catch { /* Storage may be unavailable. */ }
+    const nextDark = saved ? saved === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+    setDark(nextDark);
+    document.documentElement.classList.toggle('dark', nextDark);
+  }, []);
+  function toggleTheme() {
+    const nextDark = !dark;
+    setDark(nextDark);
+    document.documentElement.classList.toggle('dark', nextDark);
+    try { localStorage.setItem('portfolio-theme', nextDark ? 'dark' : 'light'); } catch { /* Theme still works without storage. */ }
+  }
+  const themeSwitch = <Button variant="ghost" size="icon" className="theme-toggle" title={dark ? 'Switch to light mode' : 'Switch to dark mode'} aria-label={dark ? 'Switch to light mode' : 'Switch to dark mode'} onClick={toggleTheme}>{dark ? <Sun size={18} /> : <Moon size={18} />}</Button>;
   useEffect(() => {
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => { if (entry.isIntersecting) setActive(entry.target.id); });
@@ -35,10 +50,10 @@ export function Navbar() {
     <header className="site-header"><a className="wordmark" href="#home" aria-label="MSK home">MSK<span className="logo-dot">.</span></a>
       <a className="nav-email" href="mailto:sahilkhatri.dev@gmail.com">sahilkhatri.dev@gmail.com</a>
       <nav aria-label="Main navigation" className="desktop-nav">{['Work', 'About', 'Contact'].map(label => <a className={active === label.toLowerCase() ? 'active' : ''} href={`#${label.toLowerCase()}`} key={label}>{label}<ArrowUpRight size={12} /></a>)}<a className="nav-resume" href="/resume.pdf" download="Muhammad-Sahil-Khatri-Resume.pdf">RESUME<ArrowDown size={12} /></a></nav>
-      <Button className="mobile-menu-button" variant="ghost" size="icon" aria-label={open ? 'Close navigation' : 'Open navigation'} aria-expanded={open} onClick={() => setOpen(!open)}>{open ? <X /> : <Menu />}</Button>
+      <div className="mobile-header-controls">{themeSwitch}<Button className="mobile-menu-button" variant="ghost" size="icon" aria-label={open ? 'Close navigation' : 'Open navigation'} aria-expanded={open} onClick={() => setOpen(!open)}>{open ? <X /> : <Menu />}</Button></div>
     </header>
     {open && <nav className="mobile-nav" aria-label="Mobile navigation">{['Work', 'About', 'Contact'].map(label => <a href={`#${label.toLowerCase()}`} onClick={() => setOpen(false)} key={label}>{label}<ArrowUpRight /></a>)}<a href="mailto:sahilkhatri.dev@gmail.com" onClick={() => setOpen(false)}>sahilkhatri.dev@gmail.com<ArrowUpRight /></a><a href="/resume.pdf" download="Muhammad-Sahil-Khatri-Resume.pdf" onClick={() => setOpen(false)}>Resume<ArrowDown /></a></nav>}
-    <aside className="social-rail" aria-label="Social profiles"><span className="rail-label">ELSEWHERE</span><SocialLinks /><span className="rail-line" /><span className="rail-bottom">MSK — 2026</span></aside>
+    <aside className="social-rail" aria-label="Social profiles">{themeSwitch}<span className="rail-label">ELSEWHERE</span><SocialLinks /></aside>
   </>;
 }
 
@@ -66,7 +81,7 @@ export function Hero() {
       <h1 aria-label="Hi, I'm Muhammad Sahil Khatri."><span className="hero-greeting" aria-hidden="true">Hi, I'm</span><span aria-hidden="true"><TypewriterName /></span></h1>
       <div className="hero-bottom"><p>Backend Engineer building reliable systems,<br className="desktop-break" /> scalable infrastructure, and AI-powered workflows.</p><a className="round-link" href="#work" aria-label="Explore selected work"><ArrowDown strokeWidth={1.2} size={28} /></a></div>
     </Reveal>
-    <div className="hero-footnote"><span>COMPUTER SYSTEMS ENGINEERING STUDENT</span><a href="#work">SCROLL TO EXPLORE <ArrowDown size={13} /></a></div>
+    <Reveal className="hero-footnote"><span>COMPUTER SYSTEMS ENGINEERING STUDENT</span><a href="#work">SCROLL TO EXPLORE <ArrowDown size={13} /></a></Reveal>
   </section>;
 }
 
@@ -92,7 +107,7 @@ export function Technology() {
     observer.observe(element);
     return () => observer.disconnect();
   }, []);
-  return <section id="about" className="technology"><div className="page-inner"><Reveal><div className="section-kicker"><span>02 / THE TOOLKIT</span><span>CONNECTED BY CURIOSITY</span></div><div className="tech-heading"><h2>Built on good<br />foundations<span className="title-dot">.</span></h2><p>From the database to the interface.<br />The tools behind the systems.</p></div></Reveal><div className="globe-stage"><div className="globe-canvas"><GlobeBoundary><Suspense fallback={<div className="globe-fallback" />}>{ready && <TechGlobe />}</Suspense></GlobeBoundary></div><div className="globe-labels">{technologies.map((tech, index) => <span key={tech} className={`tech-label tech-label-${index}`}><Plus size={10} />{tech}</span>)}</div><span className="globe-coordinate">ENGINEERING ECOSYSTEM / 360°</span></div><div className="tech-bottom"><span>ALWAYS LEARNING. ALWAYS ITERATING.</span><span>BACKEND · INFRASTRUCTURE · AI</span></div></div></section>;
+  return <section id="about" className="technology"><div className="page-inner"><Reveal><div className="section-kicker"><span>02 / THE TOOLKIT</span><span>CONNECTED BY CURIOSITY</span></div><div className="tech-heading"><h2>Built on good<br />foundations<span className="title-dot">.</span></h2><p>From the database to the interface.<br />The tools behind the systems.</p></div></Reveal><Reveal className="globe-stage"><div className="globe-canvas"><GlobeBoundary><Suspense fallback={<div className="globe-fallback" />}>{ready && <TechGlobe />}</Suspense></GlobeBoundary></div><div className="globe-labels">{technologies.map((tech, index) => <span key={tech} className={`tech-label tech-label-${index}`}><Plus size={10} />{tech}</span>)}</div><span className="globe-coordinate">ENGINEERING ECOSYSTEM / 360°</span></Reveal><Reveal className="tech-bottom"><span>ALWAYS LEARNING. ALWAYS ITERATING.</span><span>BACKEND · INFRASTRUCTURE · AI</span></Reveal></div></section>;
 }
 
 export function ExperienceSection() {
@@ -137,5 +152,6 @@ export function ContactSection() {
 }
 
 export function Footer() {
-  return <footer className="footer page-inner"><a href="#home" className="wordmark">MSK<span className="logo-dot">.</span></a><span>© 2026 MUHAMMAD SAHIL KHATRI</span><a className="back-top" href="#home">BACK TO TOP <ArrowUp size={14} /></a></footer>;
+  const reduced = useReducedMotion();
+  return <motion.footer initial={reduced ? false : { opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: false }} transition={{ duration: 0.5 }} className="footer page-inner"><a href="#home" className="wordmark">MSK<span className="logo-dot">.</span></a><span>© 2026 MUHAMMAD SAHIL KHATRI</span><a className="back-top" href="#home">BACK TO TOP <ArrowUp size={14} /></a></motion.footer>;
 }

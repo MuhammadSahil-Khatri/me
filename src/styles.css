@@ -44,6 +44,17 @@
   --rail-width: 76px;
   --header-height: 86px;
 }
+.dark {
+  --background: oklch(0.12 0 0);
+  --foreground: oklch(0.97 0 0);
+  --muted: oklch(0.19 0 0);
+  --muted-foreground: oklch(0.72 0 0);
+  --border: oklch(0.34 0 0);
+  --card: oklch(0.16 0 0);
+  --globe-line: oklch(0.85 0 0);
+  color-scheme: dark;
+}
+:root:not(.dark) { --globe-line: oklch(0.36 0 0); color-scheme: light; }
 @layer base {
   * { border-color: var(--border); box-sizing: border-box; }
   html { scroll-behavior: smooth; scroll-padding-top: 110px; }
@@ -65,11 +76,11 @@
 .desktop-nav a.active:after { content:''; position:absolute; bottom:-10px; left:0; width:4px; height:4px; background:var(--foreground); border-radius:50%; }
 .mobile-menu-button { display:none; }
 .social-rail { width:var(--rail-width); position:fixed; left:0; top:var(--header-height); bottom:0; border-right:1px solid var(--border); display:flex; align-items:center; flex-direction:column; z-index:25; background:var(--background); }
-.rail-label { writing-mode:vertical-rl; font:9px var(--font-detail); margin:98px 0 25px; }
+.rail-label { writing-mode:vertical-rl; font:9px var(--font-detail); margin:35px 0 25px; }
+.social-rail > .theme-toggle { margin-top:24px; flex-shrink:0; }
+.mobile-header-controls { display:none; }
 .social-links { display:flex; flex-direction:column; gap:13px; position:relative; }
 .social-links button { border-radius:0; }
-.rail-line { height:86px; width:1px; background:var(--border); margin-top:35px; }
-.rail-bottom { writing-mode:vertical-rl; font:9px var(--font-detail); margin-top:auto; margin-bottom:34px; color:var(--muted-foreground); }
 .social-notice { position:absolute; left:40px; top:0; width:190px; padding:14px; background:var(--foreground); color:var(--background); font-size:12px; z-index:40; }
 .portfolio-main { margin-left:var(--rail-width); }
 .page-inner { padding-left:6.1%; padding-right:6.1%; max-width:1600px; margin:0 auto; }
@@ -110,7 +121,7 @@
 .project-detail { margin-top:23px; border-top:1px solid var(--border); padding-top:20px; }
 .project-detail > span { font:9px var(--font-detail); }
 .project-detail p { font-size:13px; line-height:1.7; color:var(--muted-foreground); margin-top:10px; }
-.technology { background:var(--inverse-background); color:var(--inverse); padding-top:65px; padding-bottom:30px; }
+.technology { --inverse-background:var(--muted); --inverse:var(--foreground); --inverse-muted:var(--muted-foreground); --inverse-border:var(--border); background:var(--muted); color:var(--foreground); padding-top:65px; padding-bottom:30px; }
 .technology .section-kicker { color:var(--inverse-muted); }
 .tech-heading { display:flex; justify-content:space-between; align-items:flex-end; margin-top:38px; }
 .tech-heading h2 { font-size:58px; line-height:1.12; font-weight:500; }
@@ -153,7 +164,7 @@
 .field input::placeholder,.field textarea::placeholder { color:var(--muted-foreground); }
 .field > span { color:var(--muted-foreground); font:9px var(--font-detail); }
 .inquiry-submit { align-self:flex-start; min-width:180px; }
-.contact { padding-top:80px; padding-bottom:90px; }
+.contact { background:var(--muted); max-width:none; padding-top:80px; padding-bottom:90px; }
 .contact h2 { font-size:83px; line-height:1.13; font-weight:550; margin:48px 0 48px; }
 .contact-bottom { display:flex; justify-content:space-between; align-items:flex-end; gap:24px; }
 .contact-action { font-size:13px; gap:55px; padding-bottom:19px; }
@@ -174,6 +185,7 @@
   :root { --rail-width:0px; --header-height:70px; }
   html { scroll-padding-top:90px; }
   .site-header { padding:0 24px; }.wordmark { font-size:23px; }.desktop-nav,.social-rail { display:none; }.mobile-menu-button { display:inline-flex; }
+  .mobile-header-controls { display:flex; align-items:center; gap:8px; }
   .mobile-nav { position:fixed; z-index:29; inset:70px 0 auto; background:var(--background); border-bottom:1px solid var(--border); padding:15px 24px 25px; }
   .mobile-nav a { display:flex; justify-content:space-between; padding:18px 0; font-size:23px; }
   .page-inner { padding-left:24px; padding-right:24px; }

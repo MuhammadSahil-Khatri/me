@@ -35,17 +35,21 @@ export default function TechGlobe() {
     const canvas = document.createElement('canvas');
     canvas.width = 1; canvas.height = 1;
     const ctx = canvas.getContext('2d');
-    if (ctx) {
+    const updateColor = () => {
+      if (!ctx) return;
       ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--globe-line').trim();
       ctx.fillRect(0, 0, 1, 1);
       const p = ctx.getImageData(0, 0, 1, 1).data;
       setColor(`rgb(${p[0]}, ${p[1]}, ${p[2]})`);
-    }
+    };
+    updateColor();
+    const observer = new MutationObserver(updateColor);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
     const media = window.matchMedia('(prefers-reduced-motion: reduce)');
     setReduced(media.matches);
     const update = () => setReduced(media.matches);
     media.addEventListener('change', update);
-    return () => media.removeEventListener('change', update);
+    return () => { media.removeEventListener('change', update); observer.disconnect(); };
   }, []);
   if (!color) return <div className="globe-fallback" />;
   return <Canvas camera={{ position: [0, 0, 7.5], fov: 48 }} dpr={[1, 1.5]} gl={{ alpha: true, antialias: true }} frameloop={reduced ? 'demand' : 'always'} aria-label="Rotating interactive technology network globe"><Network color={color} reduced={reduced} /></Canvas>;
