@@ -118,7 +118,10 @@ export function InquirySection() {
     const result = inquirySchema.safeParse({ email: data.get('email'), description: data.get('description') });
     if (!result.success) {
       const fields = result.error.flatten().fieldErrors;
-      setErrors({ email: fields.email?.[0], description: fields.description?.[0] });
+      const nextErrors: { email?: string; description?: string } = {};
+      if (fields.email?.[0]) nextErrors.email = fields.email[0];
+      if (fields.description?.[0]) nextErrors.description = fields.description[0];
+      setErrors(nextErrors);
       return;
     }
     setErrors({});
