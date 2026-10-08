@@ -1,5 +1,5 @@
 # Portfolio roadmap
-- [ ] Match toolkit/contact backgrounds, add light/dark switching, simplify sidebar, and animate all sections.
+- [x] Match toolkit/contact backgrounds, add light/dark switching, simplify sidebar, and animate all sections.
 - [x] Build monochrome portfolio and reusable project previews.
 - [x] Add interactive technical globe and accessible navigation.
 - [x] Verify desktop/mobile layout and central interactions.
