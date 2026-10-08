@@ -1,24 +1,29 @@
-# Globe Showcase
+# Globe Showcase Studio
 
-Next.js Great for portfolio + SEO + routing Language TypeScript Type safety and maintainability Styling Tailwind CSS Fast iteration with not everywhere 3D Three.js + React Three Fiber Interactive tech globe Animation Framer Motion / Motion Smooth reveals and interactions Icons Lucide React Clean monochrome icons Images
+Next.js engineering portfolio featuring interactive 3D WebGL globe, responsive design, dark/light theme switching, and smooth animations.
 
-This project was built with [Lovable](https://lovable.dev).
+## Tech Stack
 
-## Build with Lovable
+- **Framework**: Next.js (App Router)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS & Vanilla CSS Design Tokens
+- **3D**: Three.js & React Three Fiber
+- **Animation**: Motion
+- **Icons**: Lucide React
+- **Forms & Validation**: Zod & React Hook Form
 
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/0d3aacc7-07b3-4a55-be90-103e4ee79983).
+## Getting Started
 
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
+First, install dependencies:
 
-## Development
+```bash
+npm install
+```
 
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+Then run the development server:
 
-```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
+```bash
 npm run dev
 ```
+
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.

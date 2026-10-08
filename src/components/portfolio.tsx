@@ -1,11 +1,17 @@
-import { Component, lazy, Suspense, useEffect, useState, type FormEvent, type ReactNode } from 'react';
+'use client';
+
+import { Component, Suspense, useEffect, useState, type FormEvent, type ReactNode } from 'react';
+import dynamic from 'next/dynamic';
 import { motion, useReducedMotion } from 'motion/react';
 import { ArrowDown, ArrowUpRight, ArrowUp, Github, Linkedin, Menu, X, Plus, Minus, Send, Sun, Moon } from 'lucide-react';
 import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { certifications, experience, projects, technologies } from '@/lib/portfolio-data';
 
-const TechGlobe = lazy(() => import('@/components/tech-globe'));
+const TechGlobe = dynamic(() => import('@/components/tech-globe'), {
+  ssr: false,
+  loading: () => <div className="globe-fallback" aria-label="Technology network" />,
+});
 const socialItems = [{ name: 'GitHub', Icon: Github }, { name: 'LinkedIn', Icon: Linkedin }, { name: 'X', Icon: X }];
 
 function Reveal({ children, className = '' }: { children: ReactNode; className?: string }) {
@@ -88,7 +94,33 @@ export function Hero() {
 export function ProjectList() {
   const [expanded, setExpanded] = useState<string | null>(null);
   return <section id="work" className="work page-inner"><Reveal><div className="section-kicker"><span>01 / SELECTED WORK</span><span>A FEW THINGS I'VE BEEN EXPLORING</span></div><div className="section-title-row"><h2>Selected work<span className="title-dot">.</span></h2><span className="project-count">(02)</span></div></Reveal>
-    {projects.map(project => <Reveal key={project.number} className="project-row"><div className="project-visual"><span className="image-index">{project.number} — {project.status.toUpperCase()}</span><img src={project.image} alt={project.imageAlt} loading="lazy" width={1440} height={1024} /><span className="image-caption">SYSTEM STUDY / {project.number}</span></div><div className="project-info"><div className="project-category">{project.category}</div><h3>{project.title}</h3><p>{project.description}</p><div className="project-tags">{project.tags.map(tag => <span key={tag}>{tag}</span>)}</div><Button variant="editorial" aria-expanded={expanded === project.number} onClick={() => setExpanded(expanded === project.number ? null : project.number)}>VIEW PROJECT {expanded === project.number ? <Minus size={18} /> : <ArrowUpRight size={18} />}</Button>{expanded === project.number && <div className="project-detail"><span>PROJECT OVERVIEW</span><p>{project.detail}</p></div>}</div></Reveal>)}
+    {projects.map(project => {
+      const imageSrc = typeof project.image === 'string' ? project.image : (project.image as { src: string }).src;
+      return (
+        <Reveal key={project.number} className="project-row">
+          <div className="project-visual">
+            <span className="image-index">{project.number} — {project.status.toUpperCase()}</span>
+            <img src={imageSrc} alt={project.imageAlt} loading="lazy" width={1440} height={1024} />
+            <span className="image-caption">SYSTEM STUDY / {project.number}</span>
+          </div>
+          <div className="project-info">
+            <div className="project-category">{project.category}</div>
+            <h3>{project.title}</h3>
+            <p>{project.description}</p>
+            <div className="project-tags">{project.tags.map(tag => <span key={tag}>{tag}</span>)}</div>
+            <Button variant="editorial" aria-expanded={expanded === project.number} onClick={() => setExpanded(expanded === project.number ? null : project.number)}>
+              VIEW PROJECT {expanded === project.number ? <Minus size={18} /> : <ArrowUpRight size={18} />}
+            </Button>
+            {expanded === project.number && (
+              <div className="project-detail">
+                <span>PROJECT OVERVIEW</span>
+                <p>{project.detail}</p>
+              </div>
+            )}
+          </div>
+        </Reveal>
+      );
+    })}
   </section>;
 }
 
