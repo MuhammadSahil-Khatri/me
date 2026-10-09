@@ -1,9 +1,39 @@
-import assetSystem from '@/assets/asset-system.jpg';
-import workflowSystem from '@/assets/workflow-system.jpg';
+import silinxx from '@/assets/silinxx.png';
+import presentolab from '@/assets/presentolab.png';
 
 export const projects = [
-  { number: '01', title: 'Enterprise Asset Solution', category: 'SYSTEMS / WEB APPLICATION', description: 'An exploration of a unified platform for assets, maintenance operations, and work orders.', tags: ['Asset management', 'Work orders', 'Inventory'], image: assetSystem, imageAlt: 'Monochrome sculptural server towers', status: 'Concept project', detail: 'A concept for bringing asset records, maintenance schedules, and inventory into one connected workspace. This preview illustrates the system direction; implementation details and a live project link are not yet available.' },
-  { number: '02', title: 'Intelligent Workflows', category: 'AI / AUTOMATION', description: 'Exploring the intersection of backend systems and AI-powered automation.', tags: ['AI workflows', 'Integrations', 'Orchestration'], image: workflowSystem, imageAlt: 'Connected modular blocks representing an automated workflow', status: 'Concept project', detail: 'A concept exploring how modular backend services can connect with AI-powered workflows. This is a visual preview, not a claim of a deployed product. A repository and implementation details can be added when available.' },
+
+
+  {
+    number: '01',
+    title: 'SilinX | Enterprise Asset & Maintenance Management Platform',
+    category: 'SYSTEMS / WEB APPLICATION',
+    description: 'A centralized platform for asset management, maintenance workflows, and operational efficiency.',
+    tags: ['Backend Development', 'API Design', 'Database Integration', 'Authentication', 'System Workflows', 'Payment Integration'],
+    image: silinxx,
+    imageAlt: 'SilinX enterprise asset management platform',
+    status: 'Developed',
+    detail: 'Collaborated with a team to develop SilinX, contributing to backend logic, APIs, database integration, authentication, and core system workflows.',
+    url: 'https://www.silinxx.com/',
+    repoUrl: 'https://github.com/MuhammadSahil-Khatri/SilinX'
+  },
+
+
+
+  {
+    number: '02',
+    title: 'PresentoLab | Creative Agency Website',
+    category: 'WEB DEVELOPMENT / DIGITAL AGENCY',
+    description: 'A creative agency website showcasing presentation design, branding, and visual storytelling services.',
+    tags: ['Next.js', 'Backend Integration', 'Web Development', 'SEO', 'Deployment'],
+    image: presentolab,
+    imageAlt: 'PresentoLab creative agency website preview',
+    status: 'Developed',
+    detail: 'Contributed to PresentoLab’s website development, including migrating the frontend to Next.js, improving SEO and metadata, configuring redirects, and optimizing deployment.',
+    url: 'https://presentolab.com/',
+    repoUrl: 'https://github.com/MuhammadSahil-Khatri/Presentolab'
+  },
+
 ];
 export const technologies = ['TypeScript', 'Node.js', 'PostgreSQL', 'React', 'Docker', 'Git', 'Supabase', 'AI / LLMs'];
 
@@ -16,14 +46,7 @@ export const experience = [
     summary: 'Building and maintaining the web application, with a focus on backend logic, REST APIs, database operations, and third-party integrations.',
     tools: ['Node.js', 'Express.js', 'MongoDB', 'React / Next.js'],
   },
-  {
-    period: 'AUG 2025',
-    role: 'Backend Developer',
-    company: 'Silinx',
-    url: 'https://www.silinxx.com/',
-    summary: 'Contributed backend services, APIs, and data features for a maintenance management platform and its operational dashboard.',
-    tools: ['Node.js', 'Express.js', 'REST APIs', 'Data management'],
-  },
+
   {
     period: 'NOV 2024 — DEC 2025',
     role: 'Project Manager',
@@ -38,6 +61,7 @@ export const certifications = [
     year: '2026',
     title: 'Introduction to Generative AI',
     issuer: 'Google',
+    url: 'https://www.skills.google/public_profiles/92e31a54-03e6-4516-8eee-edf05dbdc183/badges/26119688'
   },
 ];
 

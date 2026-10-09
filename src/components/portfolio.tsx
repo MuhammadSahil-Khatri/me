@@ -3,7 +3,8 @@
 import { Component, Suspense, useEffect, useState, type FormEvent, type ReactNode } from 'react';
 import dynamic from 'next/dynamic';
 import { motion, useReducedMotion } from 'motion/react';
-import { ArrowDown, ArrowUpRight, ArrowUp, Menu, X, Plus, Minus, Send, Sun, Moon } from 'lucide-react';
+import { ArrowDown, ArrowUpRight, ArrowUp, Menu, X, Plus, Minus, Send, Sun, Moon, Check, Loader2 } from 'lucide-react';
+import emailjs from '@emailjs/browser';
 import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { certifications, experience, projects, socialLinks, technologies } from '@/lib/portfolio-data';
@@ -63,8 +64,8 @@ function SocialLinks({ expanded = false }: { expanded?: boolean }) {
             aria-label={`${name} profile`}
           >
             <a href={url} target="_blank" rel="noopener noreferrer">
-              <Icon size={16} />
-              {expanded && <span>{name}</span>}
+              <Icon size={24} />
+              {/* {expanded && <span>{name}</span>} */}
             </a>
           </Button>
         );
@@ -160,36 +161,87 @@ export function Hero() {
 }
 
 export function ProjectList() {
-  const [expanded, setExpanded] = useState<string | null>(null);
-  return <section id="work" className="work page-inner"><Reveal><div className="section-kicker"><span>01 / MY PORTFOLIO</span><span>A FEW THINGS I'VE BEEN EXPLORING</span></div><div className="section-title-row"><h2>RECENT WORK SAMPLES<span className="title-dot">.</span></h2></div></Reveal>
-    {projects.map(project => {
-      const imageSrc = typeof project.image === 'string' ? project.image : (project.image as { src: string }).src;
-      return (
-        <Reveal key={project.number} className="project-row">
-          <div className="project-visual">
-            <span className="image-index">{project.number} — {project.status.toUpperCase()}</span>
-            <img src={imageSrc} alt={project.imageAlt} loading="lazy" width={1440} height={1024} />
-            <span className="image-caption">SYSTEM STUDY / {project.number}</span>
-          </div>
-          <div className="project-info">
-            <div className="project-category">{project.category}</div>
-            <h3>{project.title}</h3>
-            <p>{project.description}</p>
-            <div className="project-tags">{project.tags.map(tag => <span key={tag}>{tag}</span>)}</div>
-            <Button variant="editorial" aria-expanded={expanded === project.number} onClick={() => setExpanded(expanded === project.number ? null : project.number)}>
-              VIEW PROJECT {expanded === project.number ? <Minus size={18} /> : <ArrowUpRight size={18} />}
-            </Button>
-            {expanded === project.number && (
-              <div className="project-detail">
-                <span>PROJECT OVERVIEW</span>
-                <p>{project.detail}</p>
+  return (
+    <section id="work" className="work page-inner">
+      <Reveal>
+        <div className="section-kicker">
+          <span>01 / MY PORTFOLIO</span>
+          <span>A FEW THINGS I'VE BEEN EXPLORING</span>
+        </div>
+        <div className="section-title-row">
+          <h2>
+            RECENT WORK SAMPLES<span className="title-dot">.</span>
+          </h2>
+        </div>
+      </Reveal>
+      {projects.map((project) => {
+        const imageSrc =
+          typeof project.image === 'string'
+            ? project.image
+            : (project.image as { src: string }).src;
+        return (
+          <Reveal key={project.number} className="project-row">
+            {project.url ? (
+              <a
+                href={project.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="project-visual"
+                aria-label={`Open live preview for ${project.title}`}
+              >
+                <img
+                  style={{ objectFit: 'contain' }}
+                  src={imageSrc}
+                  alt={project.imageAlt}
+                  loading="lazy"
+                  width={1440}
+                  height={1024}
+                />
+                <div className="project-visual-overlay" aria-hidden="true">
+                  <div className="project-visual-icon">
+                    <ArrowUpRight size={44} strokeWidth={1.75} />
+                  </div>
+                </div>
+              </a>
+            ) : (
+              <div className="project-visual">
+                <img
+                  style={{ objectFit: 'contain' }}
+                  src={imageSrc}
+                  alt={project.imageAlt}
+                  loading="lazy"
+                  width={1440}
+                  height={1024}
+                />
               </div>
             )}
-          </div>
-        </Reveal>
-      );
-    })}
-  </section>;
+            <div className="project-info">
+              <div className="project-category">{project.category}</div>
+              <h3>{project.title}</h3>
+              <p>{project.description}</p>
+              <div className="project-tags">
+                {project.tags.map((tag) => (
+                  <span key={tag}>{tag}</span>
+                ))}
+              </div>
+              {(project.repoUrl || project.url) && (
+                <Button variant="editorial" asChild>
+                  <a
+                    href={project.repoUrl || project.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`View ${project.title} repository on GitHub`}
+                  >
+                    VIEW PROJECT <ArrowUpRight size={18} />
+                  </a>
+                </Button>
+              )}
+            </div>
+          </Reveal>
+        );
+      })}
+    </section>
+  );
 }
 
 class GlobeBoundary extends Component<{ children: ReactNode }, { failed: boolean }> {
@@ -217,34 +269,183 @@ export function ExperienceSection() {
 }
 
 export function CertificationsSection() {
-  return <section id="certifications" className="certifications page-inner"><Reveal><div className="section-kicker"><span>04 / MY CERTIFICATIONS</span><span>FORMAL MILESTONES / CONTINUOUS LEARNING</span></div><div className="certification-layout"><h2>HONOURS<span className="title-dot">.</span></h2><div className="certification-list">{certifications.map(item => <div className="certification-row" key={item.title}><span>{item.year}</span><div><h3>{item.title}</h3><p>{item.issuer}</p></div><ArrowUpRight aria-hidden="true" /></div>)}</div></div></Reveal></section>;
+  return (
+    <section id="certifications" className="certifications page-inner">
+      <Reveal>
+        <div className="section-kicker">
+          <span>04 / MY CERTIFICATIONS</span>
+          <span>FORMAL MILESTONES / CONTINUOUS LEARNING</span>
+        </div>
+        <div className="certification-layout">
+          <h2>
+            HONOURS<span className="title-dot">.</span>
+          </h2>
+          <div className="certification-list">
+            {certifications.map((item) => (
+              <a
+                key={item.title}
+                href={item.url || '#'}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="certification-row"
+                aria-label={`View certificate for ${item.title} by ${item.issuer}`}
+              >
+                <span>{item.year}</span>
+                <div>
+                  <h3>{item.title}</h3>
+                  <p>{item.issuer}</p>
+                </div>
+                <ArrowUpRight aria-hidden="true" size={18} />
+              </a>
+            ))}
+          </div>
+        </div>
+      </Reveal>
+    </section>
+  );
 }
 
 const inquirySchema = z.object({
   email: z.string().trim().email('Enter a valid email address.').max(255, 'Email is too long.'),
-  description: z.string().trim().min(10, 'Please add at least 10 characters.').max(1000, 'Keep your message under 1,000 characters.'),
+  message: z.string().trim().min(10, 'Please add at least 10 characters.').max(2000, 'Keep your message under 2,000 characters.'),
 });
 
 export function InquirySection() {
-  const [errors, setErrors] = useState<{ email?: string; description?: string }>({});
-  function submitInquiry(event: FormEvent<HTMLFormElement>) {
+  const [errors, setErrors] = useState<{ email?: string; message?: string }>({});
+  const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
+  const [statusMessage, setStatusMessage] = useState<string>('');
+
+  async function submitInquiry(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const result = inquirySchema.safeParse({ email: data.get('email'), description: data.get('description') });
+    const form = event.currentTarget;
+    const data = new FormData(form);
+
+    const result = inquirySchema.safeParse({
+      email: data.get('email'),
+      message: data.get('message'),
+    });
+
     if (!result.success) {
       const fields = result.error.flatten().fieldErrors;
-      const nextErrors: { email?: string; description?: string } = {};
+      const nextErrors: { email?: string; message?: string } = {};
       if (fields.email?.[0]) nextErrors.email = fields.email[0];
-      if (fields.description?.[0]) nextErrors.description = fields.description[0];
+      if (fields.message?.[0]) nextErrors.message = fields.message[0];
       setErrors(nextErrors);
       return;
     }
+
     setErrors({});
-    const subject = encodeURIComponent(`Portfolio enquiry from ${result.data.email}`);
-    const body = encodeURIComponent(`From: ${result.data.email}\n\n${result.data.description}`);
-    window.location.href = `mailto:sahilkhatri.dev@gmail.com?subject=${subject}&body=${body}`;
+    setStatus('sending');
+    setStatusMessage('');
+
+    const currentTime = new Date().toLocaleString('en-US', {
+      dateStyle: 'full',
+      timeStyle: 'medium',
+    });
+
+    const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || 'service_u0s09tc';
+    const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || 'template_lexa4z5';
+    const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || 'axFb_56Hvm68iI2jV';
+
+    const templateParams = {
+      email: result.data.email,
+      time: currentTime,
+      message: result.data.message,
+      // Compatibility aliases
+      from_email: result.data.email,
+      reply_to: result.data.email,
+      date: currentTime,
+    };
+
+    try {
+      await emailjs.send(serviceId, templateId, templateParams, publicKey);
+      setStatus('success');
+      setStatusMessage('Message sent successfully! I will get back to you shortly.');
+      form.reset();
+    } catch (err) {
+      console.error('Email sending failed:', err);
+      setStatus('error');
+      setStatusMessage('Failed to send message. Please try again or reach out directly at sahilkhatri.dev@gmail.com');
+    }
   }
-  return <section className="inquiry page-inner" aria-labelledby="inquiry-title"><Reveal><div className="section-kicker"><span>04 / START A CONVERSATION</span><span>TELL ME WHAT YOU'RE BUILDING</span></div><div className="inquiry-layout"><div><h2 id="inquiry-title">HAVE A PROJECT<br />IN MIND<span className="title-dot">?</span></h2><p>Share a few details and your email app will prepare the message.</p></div><form onSubmit={submitInquiry} noValidate><div className="field"><label htmlFor="inquiry-email">Your email</label><input id="inquiry-email" name="email" type="email" autoComplete="email" maxLength={255} placeholder="you@example.com" aria-invalid={Boolean(errors.email)} aria-describedby={errors.email ? 'email-error' : undefined} />{errors.email && <span id="email-error" role="alert">{errors.email}</span>}</div><div className="field"><label htmlFor="inquiry-description">Description</label><textarea id="inquiry-description" name="description" rows={5} minLength={10} maxLength={1000} placeholder="A short description of your project, role, or idea..." aria-invalid={Boolean(errors.description)} aria-describedby={errors.description ? 'description-error' : undefined} />{errors.description && <span id="description-error" role="alert">{errors.description}</span>}</div><Button type="submit" variant="editorial" className="inquiry-submit">PREPARE EMAIL <Send size={18} /></Button></form></div></Reveal></section>;
+
+  return (
+    <section className="inquiry page-inner" aria-labelledby="inquiry-title">
+      <Reveal>
+        <div className="section-kicker">
+          <span>04 / START A CONVERSATION</span>
+          <span>TELL ME WHAT YOU'RE BUILDING</span>
+        </div>
+        <div className="inquiry-layout">
+          <div>
+            <h2 id="inquiry-title">
+              HAVE A PROJECT<br />IN MIND<span className="title-dot">?</span>
+            </h2>
+            <p>Share a few details below and your message will be delivered directly to my inbox.</p>
+          </div>
+          <form onSubmit={submitInquiry} noValidate>
+            <div className="field">
+              <label htmlFor="inquiry-email">Your email</label>
+              <input
+                id="inquiry-email"
+                name="email"
+                type="email"
+                autoComplete="email"
+                maxLength={255}
+                placeholder="you@example.com"
+                aria-invalid={Boolean(errors.email)}
+                aria-describedby={errors.email ? 'email-error' : undefined}
+                disabled={status === 'sending'}
+              />
+              {errors.email && <span id="email-error" role="alert" className="error-text">{errors.email}</span>}
+            </div>
+
+            <div className="field">
+              <label htmlFor="inquiry-message">Message</label>
+              <textarea
+                id="inquiry-message"
+                name="message"
+                rows={5}
+                minLength={10}
+                maxLength={2000}
+                placeholder="A short description of your project, timeline, or idea..."
+                aria-invalid={Boolean(errors.message)}
+                aria-describedby={errors.message ? 'message-error' : undefined}
+                disabled={status === 'sending'}
+              />
+              {errors.message && <span id="message-error" role="alert" className="error-text">{errors.message}</span>}
+            </div>
+
+            {status === 'success' && (
+              <div className="inquiry-status-banner inquiry-success" role="status">
+                <Check size={16} />
+                <span>{statusMessage}</span>
+              </div>
+            )}
+
+            {status === 'error' && (
+              <div className="inquiry-status-banner inquiry-error" role="alert">
+                <span>{statusMessage}</span>
+              </div>
+            )}
+
+            <Button
+              type="submit"
+              variant="editorial"
+              className="inquiry-submit"
+              disabled={status === 'sending'}
+            >
+              {status === 'sending' ? (
+                <>SENDING... <Loader2 size={18} className="animate-spin" /></>
+              ) : (
+                <>SEND EMAIL <Send size={18} /></>
+              )}
+            </Button>
+          </form>
+        </div>
+      </Reveal>
+    </section>
+  );
 }
 
 export function ContactSection() {
